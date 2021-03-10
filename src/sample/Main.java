@@ -22,6 +22,12 @@ public class Main extends Application {
         //Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
         primaryStage.setTitle("ToggleButton");
 
+        // добавление на сцены на форму
+        VBox root = new VBox(); // Основное
+
+
+        //--------------------------------------------------------------------------- ToggleButton
+
         HBox hBox = new HBox(10); // вертикальное
         hBox.setAlignment(Pos.CENTER);
 
@@ -70,12 +76,53 @@ public class Main extends Application {
            }
         });
 
+        BorderPane borderPane = new BorderPane(); // Основное
+        borderPane.setTop(hBox);
+        borderPane.setCenter(rectangle);
+        root.getChildren().addAll(borderPane);
 
-        // добавление на сцены на форму
-        BorderPane root = new BorderPane(); // Основное
-        //root.getChildren().addAll(hBox, rectangle);
-        root.setTop(hBox);
-        root.setCenter(rectangle);
+        //--------------------------------------------------------------------------- CheckBox
+
+        HBox hBoxChB = new HBox(10); // вертикальное
+        hBoxChB.setAlignment(Pos.CENTER);
+        HBox hBoxRec = new HBox(10); // вертикальное
+        hBoxRec.setAlignment(Pos.CENTER);
+
+        // создание CheckBox массива
+        CheckBox[] checkBoxes = new CheckBox[]{
+                new CheckBox("RED"),
+                new CheckBox("GREEN"),
+                new CheckBox("BLUE"),
+        };
+
+        // создание нескольких квадратов
+        Rectangle[] rectangles = new Rectangle[]{
+                new Rectangle(100, 100, Color.RED),
+                new Rectangle(100, 100, Color.GREEN),
+                new Rectangle(100, 100, Color.BLUE),
+        };
+
+        for (int i=0; i<3; i++){
+            CheckBox newCheckBox = checkBoxes[i]; // выбираем определённый CheckBox  и квадрат
+            Rectangle newRectangle = rectangles[i];
+
+            hBoxChB.getChildren().add(newCheckBox); // добавляем  CheckBox на форму
+
+            newCheckBox.selectedProperty().addListener(observable ->{ // проверяем нажата или нет? И действие на нажатие
+                if(newCheckBox.isSelected()){
+                    hBoxRec.getChildren().add(newRectangle); // добавть в hBoxRec
+                }else{
+                    hBoxRec.getChildren().remove(newRectangle); // удалить
+                }
+            });
+        }
+
+        // добавляем на форму основные элементы
+        BorderPane borderPane2 = new BorderPane(); // Основное 2
+        borderPane2.setTop(hBoxChB);
+        borderPane2.setCenter(hBoxRec);
+        root.getChildren().addAll(borderPane2);
+
         Scene scene = new Scene(root, 400, 400);
         primaryStage.setScene(scene);  // размер формы и сцена
         primaryStage.show(); // отобразить
